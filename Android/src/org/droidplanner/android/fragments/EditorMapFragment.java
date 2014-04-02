@@ -6,6 +6,8 @@ import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.CameraGroundOverlays;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.android.mission.item.MissionItemRender;
+import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.polygon.Polygon;
@@ -48,7 +50,6 @@ public class EditorMapFragment extends DroneMap implements
 		polygonPath = new MapPath(mMap, Color.BLACK, getResources());
 		cameraOverlays = new CameraGroundOverlays(mMap);
 
-		manager.setMissionDraggable(true);
 		return view;
 	}
 
@@ -59,13 +60,13 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForWaypointMarkerMoving(source, marker, true);
 	}
 
 	@Override
 	public void onMarkerDragStart(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForWaypointMarkerMoving(source, marker, false);
 	}
 
@@ -86,13 +87,13 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-			// manager.missionPath.update(mission);
+            missionRender.updateMissionPath(mMap);
 		}
 	}
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForWaypointMarker(source, marker);
 		checkForPolygonMarker(source, marker);
 	}
@@ -125,13 +126,18 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
-		if (source instanceof MissionItem) {
-			editorListener.onItemClick((MissionItem) source);
+		MarkerSource source = markers.getSourceFromMarker(marker);
+		if (source instanceof MissionItemMarkerSource) {
+			editorListener.onItemClick(((MissionItemMarkerSource) source).getMarkerOrigin());
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	protected boolean isMissionDraggable() {
+		return true;
 	}
 
 }
