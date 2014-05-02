@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.droidplanner"
-          android:versionCode="66"
-          android:versionName="please run version.sh to get the version name">
+    package="org.droidplanner"
+    android:versionCode="66"
+    android:versionName="please run version.sh to get the version name" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
-    <supports-screens
-        android:requiresSmallestWidthDp="320"/>
+    <supports-screens android:requiresSmallestWidthDp="320" />
 
     <permission
         android:name=".permission.MAPS_RECEIVE"
